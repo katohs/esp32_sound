@@ -15,7 +15,7 @@ ssid, password, webhookurlはcredentials.hから、値をincludeしています�
 
 例
 
-```credentials.h
+```c:credentials.h
 #define WIFI_SSID "ssid"
 #define WIFI_PASSWD "password"
 #define WEBHOOK_URL "URL"
