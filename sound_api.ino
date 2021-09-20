@@ -1,19 +1,25 @@
 #include <WiFi.h>
+#include <HTTPClient.h>
+#include "credentials.h"
 
-  // TODO 環境変数の使い方を調べる
-  const char SSID[] = "ssid"
-  const char PASSWORD[] = "wifi paddword"
-  WiFiServer server(80);
+const char ssid[] = WIFI_SSID;
+const char password[] = WIFI_PASSWD;
+
+const String message = "インターフォンが鳴ったよ";
+
+WiFiServer server(80);
 
 void setup()
-{ 
+{
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial)
+    ;
 
-  WiFi.begin(SSID, PASSWORD);
+  WiFi.begin(ssid, password);
   Serial.print("WiFi connecting");
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     Serial.print(".");
     delay(100);
   }
@@ -26,18 +32,27 @@ void setup()
   Serial.print(WiFi.localIP());
   Serial.println("/");
 }
- 
+
 void loop()
 {
-    long sum = 0;
-    for(int i=0; i<100; i++)
-    {
-        sum += analogRead(A0);
-    }
- 
-    sum = sum/100;
- 
-    Serial.println(sum);
- 
-    delay(10);
+  HTTPClient http;
+  http.begin(WEBHOOK_URL);
+  http.addHeader("Content-Type", "application/json");
+  String requestBody = "{\"content\": \"" + message + "\"}";
+  http.POST(requestBody);
+  http.end();
+  delay(10000);
+
+  //  インターフォン音検知コード
+  //    long sum = 0;
+  //    for(int i=0; i<100; i++)
+  //    {
+  //        sum += analogRead(A0);
+  //    }
+  //
+  //    sum = sum/100;
+  //
+  //    Serial.println(sum);
+  //
+  //    delay(10);
 }
