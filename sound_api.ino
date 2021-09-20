@@ -37,6 +37,10 @@ void setup()
 void loop()
 {
 
+  HTTPClient http;
+  http.begin(WEBHOOK_URL);
+  http.addHeader("Content-Type", "application/json");
+  
   long sound = 0;
   for (int i = 0; i < 100; i++)
   {
@@ -46,11 +50,7 @@ void loop()
 
   if (AVG > 1500)
   {
-    HTTPClient http;
-    http.begin(WEBHOOK_URL);
-    http.addHeader("Content-Type", "application/json");
-
-    String requestBody = "{\"content\": \"" + message + "\"}";
+    const String requestBody = "{\"content\": \"" + message + "\"}";
     http.POST(requestBody);
     http.end();
   }
