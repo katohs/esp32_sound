@@ -9,7 +9,7 @@ esp32 + サウンドセンサーモジュールを使用し、自宅のインタ
 
 注意事項
 
-ssid, password, webhookurlはcredentials.hから、値をincludeしています。
+ssid, password, webhookurlはcredentials.hから、includeしています。
 
 このプロジェクトを使用したい場合は、ご自身でcredentials.hファイルを作成してください
 
