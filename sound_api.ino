@@ -1,5 +1,6 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
+// 秘匿情報をinclude
 #include "credentials.h"
 
 const char ssid[] = WIFI_SSID;
@@ -35,24 +36,26 @@ void setup()
 
 void loop()
 {
-  HTTPClient http;
-  http.begin(WEBHOOK_URL);
-  http.addHeader("Content-Type", "application/json");
-  String requestBody = "{\"content\": \"" + message + "\"}";
-  http.POST(requestBody);
-  http.end();
-  delay(10000);
 
-  //  インターフォン音検知コード
-  //    long sum = 0;
-  //    for(int i=0; i<100; i++)
-  //    {
-  //        sum += analogRead(A0);
-  //    }
-  //
-  //    sum = sum/100;
-  //
-  //    Serial.println(sum);
-  //
-  //    delay(10);
+  long sound = 0;
+  for (int i = 0; i < 100; i++)
+  {
+    sound += analogRead(A0);
+  }
+  const long AVG = sound / 100;
+
+  if (AVG > 1500)
+  {
+    HTTPClient http;
+    http.begin(WEBHOOK_URL);
+    http.addHeader("Content-Type", "application/json");
+
+    String requestBody = "{\"content\": \"" + message + "\"}";
+    http.POST(requestBody);
+    http.end();
+  }
+
+  Serial.println(AVG);
+
+  delay(1000);
 }
